@@ -1,0 +1,43 @@
+library(naivebayes)
+data <- read.csv("https://archive.ics.uci.edu/ml/machine-learning-databases/bridges/bridges.data.version2", header=FALSE, sep=",")
+
+head(data)
+iletestow=0
+a=0
+c=0
+wyniki<-c()
+
+for(i in 1:30){
+  idx=sample(2,nrow(data), replace=T, prob = c(0.2, 0.6))
+  train=data[idx==1,]
+  test=data[idx==2,]
+  test
+  train
+  model<-naive_bayes(V10~V2+V3+V4+V5+V6+V7+V8+V9+V11+V12+V13,
+                     data=test, usekernel = T, laplace = 1)
+  model
+  dim(model)
+  plot(model)
+  dim(test)
+  dim
+  p<-predict(model,train )
+  cbind(p,train)
+  tab1=table(p,train$V10)
+  tab1
+  sum(tab1)
+  
+  iletestow=iletestow+1
+  cat(" test nr", iletestow)
+  b=sum(diag(tab1))/sum(tab1)
+  print(b)
+  wyniki<-c(wyniki, b)
+  #cat("odchylenie", wyniki)
+  a=a+b
+}
+a=a/30
+cat("sednia arytmetyczna:", a)
+u=sd(wyniki)
+cat( "odchylenie standardowe:", u)
+
+
+
